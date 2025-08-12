@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能对话界面 - 星空动漫风</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 星空背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(2px 2px at 160px 30px, #ffd6e7, transparent),
+                radial-gradient(1px 1px at 10px 10px, #fff, transparent),
+                radial-gradient(2px 2px at 50px 20px, #fff, transparent),
+                radial-gradient(1px 1px at 80px 90px, #fff, transparent),
+                radial-gradient(2px 2px at 120px 50px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 180px 70px, #fff, transparent),
+                radial-gradient(2px 2px at 30px 80px, #ffd6e7, transparent),
+                radial-gradient(1px 1px at 70px 10px, #fff, transparent),
+                radial-gradient(2px 2px at 110px 90px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 150px 20px, #fff, transparent),
+                radial-gradient(2px 2px at 190px 60px, #ffd6e7, transparent),
+                radial-gradient(1px 1px at 15px 25px, #fff, transparent),
+                radial-gradient(2px 2px at 35px 65px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 85px 35px, #fff, transparent),
+                radial-gradient(1px 1px at 125px 75px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(2px 2px at 155px 25px, #ffd6e7, transparent),
+                radial-gradient(1px 1px at 5px 5px, #fff, transparent),
+                radial-gradient(2px 2px at 45px 15px, #fff, transparent),
+                radial-gradient(1px 1px at 75px 85px, #fff, transparent),
+                radial-gradient(2px 2px at 115px 45px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 175px 65px, #fff, transparent),
+                radial-gradient(2px 2px at 25px 75px, #ffd6e7, transparent),
+                radial-gradient(1px 1px at 65px 5px, #fff, transparent),
+                radial-gradient(2px 2px at 105px 85px, rgba(255,255,255,0.9), transparent),
+                radial-gradient(1px 1px at 145px 15px, #fff, transparent),
+                radial-gradient(2px 2px at 185px 55px, #ffd6e7, transparent);
+            background-repeat: repeat;
+            background-size: 200px 100px;
+            animation: twinkle 4s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 1; }
+        }
+
+        /* 流星效果 */
+        .meteor {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: linear-gradient(45deg, #fff, transparent);
+            border-radius: 50%;
+            animation: meteor 3s linear infinite;
+            z-index: -1;
+            box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+        }
+
+        .meteor:nth-child(1) {
+            top: 0;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .meteor:nth-child(2) {
+            top: 0;
+            left: 20%;
+            animation-delay: 0.5s;
+        }
+
+        .meteor:nth-child(3) {
+            top: 0;
+            left: 30%;
+            animation-delay: 1s;
+        }
+
+        .meteor:nth-child(4) {
+            top: 0;
+            left: 40%;
+            animation-delay: 1.5s;
+        }
+
+        .meteor:nth-child(5) {
+            top: 0;
+            left: 50%;
+            animation-delay: 2s;
+        }
+
+        .meteor:nth-child(6) {
+            top: 0;
+            left: 60%;
+            animation-delay: 2.5s;
+        }
+
+        .meteor:nth-child(7) {
+            top: 0;
+            left: 70%;
+            animation-delay: 3s;
+        }
+
+        .meteor:nth-child(8) {
+            top: 0;
+            left: 80%;
+            animation-delay: 3.5s;
+        }
+
+        .meteor:nth-child(9) {
+            top: 0;
+            left: 90%;
+            animation-delay: 4s;
+        }
+
+        .meteor:nth-child(10) {
+            top: 0;
+            left: 95%;
+            animation-delay: 4.5s;
+        }
+
+        @keyframes meteor {
+            0% {
+                transform: translateX(0) translateY(0) rotate(45deg);
+                opacity: 1;
+                box-shadow: 0 0 10px #fff, 0 0 20px #fff;
+            }
+            100% {
+                transform: translateX(200px) translateY(200px) rotate(45deg);
+                opacity: 0;
+                box-shadow: 0 0 5px #fff, 0 0 10px #fff;
+            }
+        }
+
+        .chat-container {
+            width: 95%;
+            max-width: 800px;
+            height: 80vh;
+            background: rgba(255, 182, 193, 0.8);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(255, 105, 180, 0.3),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(138, 43, 226, 0.1) 50%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { transform: translateX(-100%); }
+            50% { transform: translateX(100%); }
+        }
+
+        .chat-header {
+            background: linear-gradient(90deg, #ff9a9e, #fad0c4);
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 105, 180, 0.5);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: headerGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes headerGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .chat-header h1 {
+            position: relative;
+            top: 2.5px;
+            width: 500px;
+            height: 120px;
+            border: solid 10px #fff;
+            box-shadow: 0 0 70px rgb(190,40,210);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin: 0 auto;
+            z-index: 10;
+        }
+
+        .chat-header h1::after {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 120px;
+            box-shadow: 0 0 5px rgba(190,40,210);
+            background-color: rgba(100,30,225,.4);
+        }
+
+        .chat-header h1 {
+            animation: a 2.5s 1;
+        }
+
+        @keyframes a {
+            0%,34%,68%,100% {
+                border: solid 10px #fff;
+                box-shadow: 0 0 70px rgb(190,40,210);
+            }
+            17%,51%,85% {
+                border: solid 10px rgba(255,0,0,.5);
+                box-shadow: 0 0 90px rgba(255,0,0,.8);
+            }
+        }
+
+        .chat-header h1 span {
+            z-index: 999;
+            color: #fff;
+            position: absolute;
+            font-size: 4.5rem; /* 响应式字体大小 */
+            font-weight: 900;
+            letter-spacing: 1.5rem; /* 响应式字符间距 */
+        }
+
+        .chat-header h1 span::before {
+            content: 'Kuai/Bi';
+            text-shadow: -0.3rem -0.3rem 0px rgb(211,250,9), 0.3rem 0.3rem 0px rgb(25,10,240);
+            clip-path: inset(100% 0px 0px 0px);
+            position: absolute;
+            z-index: 999;
+            color: #fff;
+            font-size: 4.5rem; /* 响应式字体大小 */
+            font-weight: 900;
+            letter-spacing: 1.5rem; /* 响应式字符间距 */
+        }
+
+        .chat-header h1 span::before {
+            animation: move 2.5s steps(2) 1;
+        }
+
+        /* 四个卡片样式 */
+        .card {
+            position: absolute;
+            /* 使用vw单位使卡片尺寸随屏幕宽度等比例变化 */
+            width: 5vw;
+            height: 5vw;
+            /* 设置最小和最大尺寸 */
+            min-width: 30px;
+            min-height: 30px;
+            max-width: 50px;
+            max-height: 50px;
+            border-radius: 10px;
+            z-index: 5;
+            transition: all 0.3s ease;
+        }
+
+        .card-1 {
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            box-shadow: 0 0 10px rgba(255, 154, 158, 0.5);
+        }
+
+        .card-2 {
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+            box-shadow: 0 0 10px rgba(161, 196, 253, 0.5);
+        }
+
+        .card-3 {
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            box-shadow: 0 0 10px rgba(255, 236, 210, 0.5);
+        }
+
+        .card-4 {
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #84fab0, #8fd3f4);
+            box-shadow: 0 0 10px rgba(133, 250, 176, 0.5);
+        }
+
+        @keyframes move {
+            0% {
+                clip-path: inset(80% 0px 0px 0px);
+                transform: translate(-20px,-10px);
+            }
+            10% {
+                clip-path: inset(10% 0px 85% 0px);
+                transform: translate(10px,10px);
+            }
+            20% {
+                clip-path: inset(80% 0px 0px 0px);
+                transform: translate(-10px,10px);
+            }
+            30% {
+                clip-path: inset(10% 0px 85% 0px);
+                transform: translate(0px,5px);
+            }
+            40% {
+                clip-path: inset(50% 0px 30% 0px);
+                transform: translate(-5px,0px);
+            }
+            50% {
+                clip-path: inset(10% 0px 30% 0px);
+                transform: translate(5px,0px);
+            }
+            60% {
+                clip-path: inset(40% 0px 30% 0px);
+                transform: translate(5px,10px);
+            }
+            70% {
+                clip-path: inset(50% 0px 30% 0px);
+                transform: translate(-10px,10px);
+            }
+            80% {
+                clip-path: inset(80% 0px 5% 0px);
+                transform: translate(20px,-10px);
+            }
+            90% {
+                clip-path: inset(80% 0px 0px 0px);
+                transform: translate(-10px,0px);
+            }
+            100% {
+                clip-path: inset(80% 0px 0px 0px);
+                transform: translate(0px,0px);
+            }
+        }
+
+        .back-button {
+            position: absolute;
+            left: 25px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: rgba(10, 10, 30, 0.05);
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #8a2be2, #4b0082);
+            border-radius: 4px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 18px;
+            border-radius: 20px;
+            animation: messageSlide 0.4s ease-out;
+            position: relative;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .user-message {
+            background: linear-gradient(135deg, #8a2be2, #4b0082);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 8px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            border-radius: inherit;
+            animation: messageGlow 2s ease-in-out infinite;
+        }
+
+        .ai-message {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02));
+            color: #e6e6fa;
+            align-self: flex-start;
+            border-bottom-left-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .ai-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(138, 43, 226, 0.1), transparent);
+            border-radius: inherit;
+            animation: aiMessageGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes messageGlow {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes aiMessageGlow {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.6; }
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 25px;
+            background: linear-gradient(90deg, #ffb6c1, #ffc0cb);
+            border-top: 2px solid rgba(255, 105, 180, 0.5);
+            position: relative;
+        }
+
+        .chat-input::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.8), transparent);
+            animation: inputGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes inputGlow {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 18px 25px;
+            border: 2px solid rgba(138, 43, 226, 0.3);
+            border-radius: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .chat-input input:focus {
+            border-color: rgba(138, 43, 226, 0.8);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .chat-input input::placeholder {
+            color: rgba(230, 230, 250, 0.6);
+        }
+
+        .chat-input button {
+            background: linear-gradient(135deg, #8a2be2, #4b0082);
+            color: white;
+            border: none;
+            border-radius: 35px;
+            padding: 18px 35px;
+            margin-left: 15px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-input button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .chat-input button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(138, 43, 226, 0.4);
+        }
+
+        .chat-input button:hover::before {
+            left: 100%;
+        }
+
+        .upload-button {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.3), rgba(75, 0, 130, 0.3));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 35px;
+            padding: 18px 25px;
+            margin-left: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e6e6fa;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .upload-button:hover {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.5), rgba(75, 0, 130, 0.5));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .upload-button input[type="file"] {
+            display: none;
+        }
+
+        .typing-indicator {
+            display: none;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            color: #e6e6fa;
+            align-self: flex-start;
+            padding: 18px;
+            border-radius: 20px;
+            border-bottom-left-radius: 8px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .typing-indicator span {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: linear-gradient(135deg, #8a2be2, #4b0082);
+            border-radius: 50%;
+            margin: 0 3px;
+            animation: typing 1.2s infinite;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-8px) scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 90vh;
+                margin: 10px;
+            }
+            
+            .chat-header h1 {
+                font-size: 1.4rem;
+            }
+            
+            .chat-header h1 span {
+                font-size: 1.4rem;
+                letter-spacing: 0.2rem;
+            }
+            
+            .chat-header h1 span::before {
+                font-size: 1.4rem;
+                letter-spacing: 0.2rem;
+                text-shadow: -0.1rem -0.1rem 0px rgb(211,250,9), 0.1rem 0.1rem 0px rgb(25,10,240);
+            }
+            
+            /* 响应式卡片样式 */
+            .card {
+                /* 使用vw单位使卡片尺寸随屏幕宽度等比例变化 */
+                width: 3.5vw;
+                height: 3.5vw;
+                /* 设置最小尺寸 */
+                min-width: 15px;
+                min-height: 15px;
+                /* 设置最大尺寸 */
+                max-width: 30px;
+                max-height: 30px;
+                border-radius: 6px;
+            }
+
+            .card-1 {
+                top: 10px;
+                left: 10px;
+            }
+
+            .card-2 {
+                top: 10px;
+                right: 10px;
+            }
+
+            .card-3 {
+                bottom: 10px;
+                left: 10px;
+            }
+
+            .card-4 {
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .message {
+                max-width: 90%;
+                padding: 15px;
+            }
+            
+            .chat-input {
+                padding: 20px;
+            }
+            
+            .chat-input input {
+                padding: 15px 20px;
+            }
+            
+            .chat-input button,
+            .upload-button {
+                padding: 15px 25px;
+            }
+            .back-button {
+                z-index: 100;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 流星效果 -->
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <button class="back-button" id="backButton">←</button>
+            <h1><span>Kuai/Bi</span></h1>
+            <!-- 四个卡片元素 -->
+            <div class="card card-1"></div>
+            <div class="card card-2"></div>
+            <div class="card card-3"></div>
+            <div class="card card-4"></div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message ai-message">
+                欢迎 欢迎！我是您的AI助手，为您提供帮助。请问有什么可以为您效劳的吗？🌟
+            </div>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="在星空中输入您的问题..." autocomplete="off">
+            <button id="sendButton">发送 ✨</button>
+            <button class="upload-button" id="uploadButton">
+                <input type="file" id="fileInput" accept="image/*">
+                <span>📁</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const chatMessages = document.getElementById('chatMessages');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        const uploadButton = document.getElementById('uploadButton');
+        const fileInput = document.getElementById('fileInput');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const backButton = document.getElementById('backButton');
+
+        // 发送消息函数
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (message) {
+                // 添加用户消息到聊天界面
+                addMessage(message, 'user');
+                
+                // 清空输入框
+                userInput.value = '';
+                
+                // 显示打字指示器
+                typingIndicator.style.display = 'block';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // 模拟API调用
+                setTimeout(() => {
+                    // 隐藏打字指示器
+                    typingIndicator.style.display = 'none';
+                    
+                    // 添加AI回复（实际应用中这里会调用真实的API）
+                    const responses = [
+                        "✨ 在浩瀚的星空中，我为您找到了答案！在实际应用中，这里会接入真实的AI API来生成回复。🌟",
+                        "🌌 感谢您的提问！在真实的星空环境中，我会通过API调用来获取准确的答案。✨",
+                        "⭐ 我理解您的需求。当您接入API后，我将能够在星空中为您提供更准确和个性化的回答。🌠",
+                        "🌙 这是模拟的AI回复。接入真实API后，您可以获得更智能的星空对话体验。✨"
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(randomResponse, 'ai');
+                }, 1500);
+            }
+        }
+
+        // 添加消息到聊天界面
+        function addMessage(content, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(sender === 'user' ? 'user-message' : 'ai-message');
+            messageDiv.textContent = content;
+            chatMessages.appendChild(messageDiv);
+            
+            // 滚动到最新消息
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // 添加用户上传的图片到聊天界面
+        function addUserImage(file) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', 'user-message');
+            
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(file);
+            img.style.maxWidth = '200px';
+            img.style.maxHeight = '200px';
+            img.style.borderRadius = '10px';
+            
+            messageDiv.appendChild(img);
+            chatMessages.appendChild(messageDiv);
+            
+            // 滚动到最新消息
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // 事件监听器
+        sendButton.addEventListener('click', sendMessage);
+        
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // 图片上传事件监听器
+        uploadButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                // 添加用户上传的图片到聊天界面
+                addUserImage(file);
+                
+                // 清空文件输入框
+                fileInput.value = '';
+                
+                // 显示打字指示器
+                typingIndicator.style.display = 'block';
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // 模拟API调用
+                setTimeout(() => {
+                    // 隐藏打字指示器
+                    typingIndicator.style.display = 'none';
+                    
+                    // 添加AI回复（实际应用中这里会调用真实的API）
+                    const responses = [
+                        "🌟 我收到了您上传的图片！在星空中，我会通过API调用来分析图片内容。✨",
+                        "🌌 感谢您分享这张图片。在真实的星空环境中，我会通过API调用来获取关于图片的详细信息。⭐",
+                        "🌙 我已经收到了您的图片。当您接入API后，我将能够在星空中为您提供更准确的图片分析结果。🌠"
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(randomResponse, 'ai');
+                }, 1500);
+            } else if (file) {
+                alert('请选择一个有效的图片文件');
+                fileInput.value = '';
+            }
+        });
+
+        // 返回按钮事件监听器
+        backButton.addEventListener('click', () => {
+            window.location.href = '挑战杯.html';
+        });
+
+        // 初始时聚焦输入框
+        userInput.focus();
+    </script>
+</body>
+</html>
