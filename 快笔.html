@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI智能体对话系统</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap");
+
+        * {
+            box-sizing: border-box;
+            margin: auto;
+        }
+
+        body {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            font-family: "Yeseva One";
+        }
+
+        video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+        .shell {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 220vh; /* 扩大到原来的两倍 */
+            aspect-ratio: 1/1;
+            display: flex;
+            border-radius: 50%;
+            overflow: hidden;
+            text-align: center;
+            filter: drop-shadow(-15px 15px 5px #006e9d); /* 调整阴影 */
+            margin: auto; /* 居中显示 */
+        }
+
+        .text-wrapper {
+            font-size: 140px; /* 扩大字体大小到原来的两倍 */
+            position: relative;
+            top: -30px; /* 上移20px */
+        }
+
+        span.wave {
+            background: -50% 0%/200% 100% linear-gradient(90deg, #32967048, #0a26ff, #32967048);
+            color: transparent;
+            background-clip: text;
+            animation: flow 4s linear infinite;
+            padding: 0 140px; /* 扩大padding到原来的两倍 */
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block; /* 确保缩放效果正常 */
+            transform-origin: center; /* 设置缩放中心点 */
+        }
+        
+        span.wave:hover {
+            transform: scale(1.2); /* 减小悬停时的缩放比例 */
+        }
+        
+        span.wave:active {
+            transform: scale(1.5); /* 减小点击时的缩放比例 */
+        }
+        .shell.enlarged {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(3); /* 扩大scale到原来的两倍 */
+            z-index: 1000;
+            cursor: pointer;
+            will-change: transform;
+        }
+        .box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .box:nth-of-type(1) {
+            height: 35%;
+            opacity: 0.6;
+        }
+
+        .box:nth-of-type(2) {
+            height: 67%;
+            opacity: 0.5;
+        }
+
+        .box:nth-of-type(3) {
+            height: 93%;
+            opacity: 0.4;
+        }
+
+        .wave {
+            /* 创建两个径向渐变蒙版，模拟波浪的上下部分 */
+            mask: radial-gradient(46.6px at 50% calc(100% - (27px + 38px)),
+                    #fff 99%, #ffffff00 101%), radial-gradient(46.6px at 50% calc(100% + 38px),
+                    #ffffff00 99%, #fff 101%) repeat-x;
+            -webkit-mask: radial-gradient(46.6px at 50% calc(100% - (27px + 38px)),
+                    #fff 99%, #ffffff00 101%), radial-gradient(46.6px at 50% calc(100% + 38px),
+                    #ffffff00 99%, #fff 101%) repeat-x;
+            /* 设置蒙版的大小，使波浪在水平上重复 */
+            mask-size: calc(4*27px) 100%;
+            -webkit-mask-size: calc(4*27px) 100%;
+            /* 设置蒙版的初始位置，调整波浪的位置 */
+            mask-position: calc(50% - 2*27px) 0, 50% calc(100% - 27px);
+            -webkit-mask-position: calc(50% - 2*27px) 0, 50% calc(100% - 27px);
+            animation: flow 5s linear infinite;
+        }
+
+        @keyframes flow {
+            0% {
+                /* 设置动画开始时的蒙版位置 */
+                -webkit-mask-position: calc(50% - 2*27px) 0, 50% calc(100% - 27px);
+            }
+            100% {
+                /* 设置动画结束时的蒙版位置，使波浪看起来在移动 */
+                -webkit-mask-position: calc(50% - 6*27px) 0, calc(50% - 4*27px) calc(200% - 27px);
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            background: transparent;
+        }
+        
+        /* 星空背景 */
+        #space {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* 移除原有的动态背景粒子 */
+        .particles {
+            display: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+        }
+
+        .text-content {
+            /* 添加过渡效果使放大更平滑 */
+            transition: transform 0.3s ease;
+            /* 添加点击放大效果 */
+            cursor: pointer;
+            display: inline-block; /* 确保缩放效果正常 */
+            transform-origin: center; /* 设置缩放中心点 */
+        }
+
+        /* 悬停时放大 */
+        .text-content:hover {
+            transform: scale(1.1); /* 减小悬停时的缩放比例 */
+        }
+
+        /* 点击时放大 */
+        .text-content:active {
+            transform: scale(1.2); /* 减小点击时的缩放比例 */
+        }
+
+        .text-author {
+            font-size: 90px; /* 缩小后的字体大小 */
+            text-align: center; /* 居中对齐 */
+            margin-top: 5px; /* 减小顶部边距 */
+            /* 添加过渡效果使放大更平滑 */
+            transition: transform 0.3s ease;
+            /* 添加点击放大效果 */
+            cursor: pointer;
+            display: inline-block; /* 确保缩放效果正常 */
+            transform-origin: center; /* 设置缩放中心点 */
+        }
+
+        /* 悬停时放大 */
+        .text-author:hover {
+            transform: scale(1.1); /* 减小悬停时的缩放比例 */
+        }
+
+        /* 点击时放大 */
+        .text-author:active {
+            transform: scale(1.2); /* 减小点击时的缩放比例 */
+        }
+
+
+
+
+        .features {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-top: auto;
+            position: absolute;
+            bottom: 22px;
+            left: 0;
+            right: 0;
+            height: 400px;
+            perspective: 1000px;
+        }
+        
+
+
+        .feature-card {
+            position: absolute;
+            width: 170px;
+            height: 110px;
+            right:-10px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            transform-origin: center center;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        .feature-card.active {
+            transform: rotateY(0deg) translateZ(0);
+            z-index: 4;
+        }
+
+        .feature-card:nth-child(1) {
+            transform: rotateY(0deg) translateZ(10px);
+            z-index: 4;
+        }
+
+        .feature-card:nth-child(2) {
+            transform: rotateY(-55deg) translateZ(-70px) translateX(-20px);
+            z-index: 3;
+        }
+
+        .feature-card:nth-child(3) {
+            transform: rotateY(-85deg) translateZ(-95px) translateX(-40px);
+            z-index: 2;
+        }
+
+        .feature-card:nth-child(4) {
+            transform: rotateY(-115deg) translateZ(-110px) translateX(-70px);
+            z-index: 1;
+        }
+
+        .feature-card.moving {
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .features {
+                height: 300px;
+            }
+
+            .feature-card {
+                width: 280px;
+                height: 200px;
+                padding: 25px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+     <div class="shell">
+        <div class="box wave"></div>
+        <div class="box wave"></div>
+        <div class="box wave"></div>
+        <div class="text-wrapper">
+            <div class="text-content">
+                <span class="wave">Kuai</span>
+                <br>
+                <span class="wave">Bi</span>
+            </div>
+            <div class="text-author">
+                <span class="wave">快笔</span>
+            </div>
+        </div>
+    </div>
+    <video autoplay loop muted>
+        <source src="./beach.mp4">
+    </video>
+
+    <!-- 星空背景 -->
+    <canvas id="space"></canvas>
+
+    <div class="container">
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>新闻稿</h3>
+                <p></p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3>公众号推文</h3>
+                <p></p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>广告标语</h3>
+                <p></p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📝</div>
+                <h3>产品描述</h3>
+                <p></p>
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script>
+        // 星空背景动画
+        const canvas = document.getElementById("space");
+        const c = canvas.getContext("2d");
+        const raf = window.requestAnimationFrame;
+        
+        // 配置参数
+        const cfg = {
+            numStars: 10000,  // 星星数量
+            focalLength: canvas.width * 2,  // 焦距，影响3D效果
+            mouseInfluence: 1,   // 鼠标影响系数 - 增加幅度
+            speed: 3.0, // 移动速度 - 提高初始速度
+            defaultSpeed: 3.0, // 默认速度
+            maxStarSize: 5,   // 星星最大尺寸
+            fadeStartZ: 200,  // 开始淡出的距离
+            fadeEndZ: 100 // 完全消失的距离
+        };
+        
+        let stars = [], cx, cy, mx = 0, my = 0;
+        let lastWheelTime = 0; // 记录最后一次滚轮时间
+        
+        // 初始化星星数组
+        function init() {
+            cx = canvas.width / 2;
+            cy = canvas.height / 2;
+            stars = [];
+            
+            // 生成中心密集区域的粒子（约占总数的70%）
+            const centerCount = Math.floor(cfg.numStars * 0.7);
+            const centerRadius = Math.min(canvas.width, canvas.height) * 0.3; // 中心区域半径为画布最小边的30%
+            
+            // 生成外围稀疏区域的粒子（约占总数的30%）
+            const outerCount = cfg.numStars - centerCount;
+            
+            // 创建中心区域粒子
+            for (let i = 0; i < centerCount; i++) {
+                // 在中心圆形区域内随机分布
+                const angle = Math.random() * Math.PI * 2;
+                const radius = Math.sqrt(Math.random()) * centerRadius; // 使用平方根使粒子在中心更密集
+                
+                stars.push({
+                    x: cx + Math.cos(angle) * radius,
+                    y: cy + Math.sin(angle) * radius,
+                    z: Math.random() * canvas.width,
+                    o: '0.' + Math.floor(Math.random() * 99) + 1,  // 随机透明度
+                    px: 0,  // 上一帧x坐标
+                    py: 0,  // 上一帧y坐标
+                    pz: 0,  // 上一帧z坐标
+                    isCenter: true // 标记为中心粒子
+                });
+            }
+            
+            // 创建外围区域粒子
+            for (let i = 0; i < outerCount; i++) {
+                // 在整个画布范围内随机分布
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    z: Math.random() * canvas.width,
+                    o: '0.' + Math.floor(Math.random() * 99) + 1,  // 随机透明度
+                    px: 0,  // 上一帧x坐标
+                    py: 0,  // 上一帧y坐标
+                    pz: 0,  // 上一帧z坐标
+                    isCenter: false // 标记为外围粒子
+                });
+            }
+        }
+        
+        // 使用透视投影公式: 屏幕 = (世界坐标 - 中心) * (焦距 / z) + 中心
+        function pos(x, y, z) {
+            const scale = cfg.focalLength / z;
+            return {
+                x: (x - cx) * scale + cx,
+                y: (y - cy) * scale + cy,
+                size: Math.min(cfg.maxStarSize, scale)  // 限制星星大小
+            };
+        }
+        
+        // 计算星星透明度，实现平滑淡出效果
+        function alpha(z) {
+            if (z <= cfg.fadeStartZ) {
+                // 线性插值计算透明度
+                return Math.max(0, Math.min(1, (z - cfg.fadeEndZ) / (cfg.fadeStartZ - cfg.fadeEndZ)));
+            }
+            return 1;
+        }
+        
+        // 更新星星位置
+        function move() {
+            stars.forEach(star => {
+                // 保存当前位置用于绘制拖尾
+                [star.px, star.py, star.pz] = [star.x, star.y, star.z];
+                
+                // 根据粒子类型设置不同的移动速度
+                const speedFactor = star.isCenter ? 0.5 : 1; // 中心粒子速度为外围的一半
+                
+                // 向观察者移动
+                star.z -= cfg.speed * speedFactor;
+                // 根据鼠标位置调整星星移动
+                star.x += mx * cfg.mouseInfluence / star.z;
+                star.y += my * cfg.mouseInfluence / star.z;
+                
+                // 实现粒子循环效果：超出屏幕的粒子自动补充到另一边
+                if (star.z <= cfg.fadeEndZ) {
+                    // 当粒子飞出视野前方时，重置到后方
+                    star.z = canvas.width;
+                    star.x = Math.random() * canvas.width;
+                    star.y = Math.random() * canvas.height;
+                    [star.px, star.py, star.pz] = [star.x, star.y, star.z];
+                } else if (star.x < 0 || star.x > canvas.width || star.y < 0 || star.y > canvas.height) {
+                    // 当粒子移出屏幕左右或上下边界时，从对面边界重新进入
+                    if (star.x < 0) star.x = canvas.width;
+                    else if (star.x > canvas.width) star.x = 0;
+                    if (star.y < 0) star.y = canvas.height;
+                    else if (star.y > canvas.height) star.y = 0;
+                    // 保持粒子的z坐标和速度
+                    [star.px, star.py] = [star.x, star.y];
+                }
+            });
+        }
+        
+        // 渲染星星和拖尾
+        function draw() {
+            // 自适应画布大小
+            if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                init();
+            }
+            
+            // 创建梦幻渐变背景
+            const gradient = c.createLinearGradient(0, 0, 0, canvas.height);
+            gradient.addColorStop(0, '#a76b8a');    // 深粉紫色
+            gradient.addColorStop(0.2, '#b88ba4');  // 中粉紫色
+            gradient.addColorStop(0.4, '#c9abc0');  // 浅粉紫色
+            gradient.addColorStop(0.6, '#a76b8a');  // 深粉紫色
+            gradient.addColorStop(0.8, '#b88ba4');  // 中粉紫色
+            gradient.addColorStop(1, '#c9abc0');    // 浅粉紫色
+            
+            c.fillStyle = gradient;
+            c.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制每颗星星
+            stars.forEach(star => {
+                const curr = pos(star.x, star.y, star.z);
+                const a = alpha(star.z);
+                // 高速时绘制拖尾
+                if (cfg.speed > 10) {
+                    const prev = pos(star.px, star.py, star.pz);
+                    c.beginPath();
+                    c.moveTo(prev.x, prev.y);
+                    c.lineTo(curr.x, curr.y);
+                    c.strokeStyle = `rgba(255, 255, 255, ${0.3 * a})`;
+                    c.lineWidth = curr.size;
+                    c.stroke();
+                }
+                // 绘制星星
+                c.beginPath();
+                c.arc(curr.x, curr.y, curr.size, 0, Math.PI * 2);
+                c.fillStyle = `rgba(255, 255, 255, ${parseFloat(star.o) * a})`;
+                c.fill();
+            });
+        }
+        
+        // 动画循环
+        function loop() {
+            raf(loop);
+            
+            // 速度递减逻辑
+            const now = Date.now();
+            if (now - lastWheelTime > 2000) { // 2秒后开始递减
+                const timeDiff = now - lastWheelTime - 2000;
+                const decayFactor = Math.min(1, timeDiff / 3000); // 3秒内完成递减
+                const targetSpeed = cfg.defaultSpeed;
+                cfg.speed = cfg.speed + (targetSpeed - cfg.speed) * 0.02 * decayFactor;
+            }
+            
+            move();
+            draw();
+        }
+        
+        // 鼠标事件处理
+        document.addEventListener('mousemove', e => {
+            mx = e.clientX - cx;
+            my = e.clientY - cy;
+        });
+        
+        document.addEventListener('wheel', e => {
+            const now = Date.now();
+            if (now - lastWheelTime > 100) { // 防止快速滚动导致速度变化过快
+                cfg.speed = Math.max(0.1, Math.min(20, cfg.speed - e.deltaY * 0.005));
+                lastWheelTime = now;
+            }
+        });
+
+
+        // 堆叠卡片功能
+        function initStackedCards() {
+            const cards = document.querySelectorAll('.feature-card');
+            let currentActiveIndex = 0;
+
+            cards.forEach((card, index) => {
+                card.addEventListener('click', () => {
+                    if (index === currentActiveIndex) return;
+                    
+                    // 添加移动动画类
+                    cards.forEach(c => c.classList.add('moving'));
+                    
+                    // 更新当前激活的卡片
+                    cards[currentActiveIndex].classList.remove('active');
+                    card.classList.add('active');
+                    
+                    // 重新排列卡片位置
+                    setTimeout(() => {
+                        cards.forEach((c, i) => {
+                            c.classList.remove('moving');
+                            if (i === index) {
+                                // 当前点击的卡片变为正面
+                                c.style.transform = 'rotateY(0deg) translateZ(0)';
+                                c.style.zIndex = '4';
+                            } else if (i < index) {
+                                // 前面的卡片移到后面
+                                const newIndex = cards.length - (index - i);
+                                const angle = -45 * newIndex;
+                                const translateZ = -50 * newIndex;
+                                const translateX = -20 * newIndex;
+                                c.style.transform = `rotateY(${angle}deg) translateZ(${translateZ}px) translateX(${translateX}px)`;
+                                c.style.zIndex = newIndex;
+                            } else {
+                                // 后面的卡片保持相对位置
+                                const newIndex = i - index;
+                                const angle = -45 * newIndex;
+                                const translateZ = -50 * newIndex;
+                                const translateX = -20 * newIndex;
+                                c.style.transform = `rotateY(${angle}deg) translateZ(${translateZ}px) translateX(${translateX}px)`;
+                                c.style.zIndex = 4 - newIndex;
+                            }
+                        });
+                    }, 50);
+                    
+                    currentActiveIndex = index;
+                });
+            });
+        }
+
+        // 波浪图点击事件
+        function initWaveClick() {
+            const shell = document.querySelector('.shell');
+            
+            // 给整个容器添加点击事件
+            shell.addEventListener('click', function() {
+                // 创建一个容器的副本用于动画效果
+                const shellClone = shell.cloneNode(true);
+                shellClone.style.position = 'fixed';
+                shellClone.style.top = shell.getBoundingClientRect().top + 'px';
+                shellClone.style.left = shell.getBoundingClientRect().left + 'px';
+                shellClone.style.zIndex = '1000';
+                shellClone.style.transition = 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease';
+                shellClone.style.pointerEvents = 'none';
+                shellClone.style.willChange = 'transform, opacity';
+                document.body.appendChild(shellClone);
+                
+                // 隐藏原始容器
+                shell.style.visibility = 'hidden';
+                
+                // 执行放大动画（放大6倍）
+                requestAnimationFrame(() => {
+                    shellClone.style.transform = 'translate(-50%, -50%) scale(6)'; // 扩大scale到原来的两倍
+                    shellClone.style.top = '50%';
+                    shellClone.style.left = '50%';
+                    shellClone.style.opacity = '0';
+                });
+                
+                // 动画结束后跳转到AI对话界面
+                setTimeout(() => {
+                    document.body.removeChild(shellClone);
+                    
+                    // 跳转到AI对话界面
+                    window.location.href = 'ai对话界面.html';
+                }, 600);
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 启动星空动画
+            init();
+            loop();
+           
+            
+            // 初始化堆叠卡片
+            initStackedCards();
+            
+            // 初始化波浪图点击事件
+            initWaveClick();
+        });
+    </script>
+</body>
+</html>
